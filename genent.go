@@ -56,6 +56,7 @@ func genMessage(gen *protogen.Plugin, file *protogen.File, g *protogen.Generated
 		g.P("//")
 		g.P(deprecationComment)
 	}
+	// if message miss id field will exit
 
 }
 
