@@ -89,8 +89,9 @@ message Pet {
     pattern:
         "Edges/edge.From('owner', User.Type).Ref('pets').Unique()"
   };
-  PetType ptype = 1;
-  string name = 2;
+  int64 id = 1;
+  PetType ptype = 2;
+  string name = 3;
 }
 
 enum PetType {
