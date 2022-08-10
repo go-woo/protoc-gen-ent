@@ -1,0 +1,18 @@
+
+syntax = "proto3";
+
+package ent;
+
+import "google/protobuf/descriptor.proto";
+
+option go_package = "github/go-woo/protoc-gen-ent/ent;ent";
+
+extend google.protobuf.FieldOptions {
+  // Rules specify the validations to be performed on this field. By default,
+  // no validation is performed against a field.
+  optional FieldRules field = 1171;
+}
+
+message FieldRules {
+  string rules = 1;
+}

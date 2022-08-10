@@ -3,13 +3,14 @@ syntax = "proto3";
 package v1;
 
 import "google/api/annotations.proto";
-//import "google/api/routing.proto";
 import "google/api/client.proto";
-//import "google/api/field_behavior.proto";
-//import "google/api/resource.proto";
-//import "google/protobuf/empty.proto";
-//import "google/protobuf/field_mask.proto";
-//import "google/protobuf/timestamp.proto";
+import "google/api/field_behavior.proto";
+import "google/api/resource.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+import "ent/ent.proto";
 
 option go_package = "protoc-gen-echo/example/v1;v1";
 
@@ -62,6 +63,59 @@ service Greeter {
     };
   }
 }
+
+// The ent
+message User {
+  option (google.api.resource) = {
+    type: "/ent"
+    pattern:
+        "Edges/edge.To(\"pets\", Pet.Type)"
+    pattern:
+        "Indexes/index.Fields(\"username\")/index.Fields(\"age\", \"nickname\").Unique()"
+    pattern:
+        "Annotations/Table: \"example_users\""
+    pattern:
+        "Mixin/TimeMixin{}/DetailsMixin{}"
+  };
+  int64 id = 1;
+  int32 age = 2 [(ent.field).rules = "Positive()/Default(1)"];
+  string username = 3 [(ent.field).rules = "Unique()"];
+  string nickname = 4;
+}
+
+message Pet {
+  option (google.api.resource) = {
+    type: "/ent"
+    pattern:
+        "Edges/edge.From(\"owner\", User.Type).Ref(\"pets\").Unique()"
+  };
+  PetType ptype = 1;
+  string name = 2;
+}
+
+enum PetType {
+  DOG = 0;
+  CAT = 1;
+}
+
+message TimeMixin {
+  option (google.api.resource) = {
+    type: "/mixin"
+  };
+  int64 id = 1;
+  google.protobuf.Timestamp created_at = 2 [(ent.field).rules = "Immutable().Default(time.Now)"];;
+  google.protobuf.Timestamp updated_at = 3 [(ent.field).rules = "Default(time.Now).UpdateDefault(time.Now)"];;
+}
+
+message DetailsMixin {
+  option (google.api.resource) = {
+    type: "/mixin"
+  };
+  int64 id = 1;
+  int64 age = 2 [(ent.field).rules = "Positive()"];
+  string name = 3 [(ent.field).rules = "NotEmpty()"];
+}
+
 
 // The request message containing the user's name.
 message HelloRequest {
