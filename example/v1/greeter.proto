@@ -69,11 +69,11 @@ message User {
   option (google.api.resource) = {
     type: "/ent"
     pattern:
-        "Edges/edge.To(\"pets\", Pet.Type)"
+        "Edges/edge.To('pets', Pet.Type)"
     pattern:
-        "Indexes/index.Fields(\"username\")/index.Fields(\"age\", \"nickname\").Unique()"
+        "Indexes/index.Fields('username')/index.Fields('age', 'nickname').Unique()"
     pattern:
-        "Annotations/Table: \"example_users\""
+        "Annotations/Table: 'example_users'"
     pattern:
         "Mixin/TimeMixin{}/DetailsMixin{}"
   };
@@ -87,7 +87,7 @@ message Pet {
   option (google.api.resource) = {
     type: "/ent"
     pattern:
-        "Edges/edge.From(\"owner\", User.Type).Ref(\"pets\").Unique()"
+        "Edges/edge.From('owner', User.Type).Ref('pets').Unique()"
   };
   PetType ptype = 1;
   string name = 2;
@@ -103,8 +103,8 @@ message TimeMixin {
     type: "/mixin"
   };
   int64 id = 1;
-  google.protobuf.Timestamp created_at = 2 [(ent.field).rules = "Immutable().Default(time.Now)"];;
-  google.protobuf.Timestamp updated_at = 3 [(ent.field).rules = "Default(time.Now).UpdateDefault(time.Now)"];;
+  google.protobuf.Timestamp created_at = 2 [(ent.field).rules = "Immutable().Default(time.Now)"];
+  google.protobuf.Timestamp updated_at = 3 [(ent.field).rules = "Default(time.Now).UpdateDefault(time.Now)"];
 }
 
 message DetailsMixin {
