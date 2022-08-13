@@ -27,7 +27,9 @@ func main() {
 			if !f.Generate {
 				continue
 			}
-			generateSchemeFile(gen, f, *omitempty)
+			for _, sf := range generateSchemaFiles(gen, f, *omitempty) {
+				generateSchemaFile(sf)
+			}
 		}
 		return nil
 	})

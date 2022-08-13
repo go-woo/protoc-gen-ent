@@ -4,15 +4,15 @@ package v1;
 
 import "google/api/annotations.proto";
 import "google/api/client.proto";
-import "google/api/field_behavior.proto";
+//import "google/api/field_behavior.proto";
 import "google/api/resource.proto";
-import "google/protobuf/empty.proto";
-import "google/protobuf/field_mask.proto";
+//import "google/protobuf/empty.proto";
+//import "google/protobuf/field_mask.proto";
 import "google/protobuf/timestamp.proto";
 
-import "ent/ent.proto";
+import "gent/gent.proto";
 
-option go_package = "protoc-gen-echo/example/v1;v1";
+option go_package = "protoc-gen-ent/example/v1;v1";
 
 // The greeting service definition.
 service Greeter {
@@ -78,8 +78,8 @@ message User {
         "Mixin/TimeMixin{}/DetailsMixin{}"
   };
   int64 id = 1;
-  int32 age = 2 [(ent.field).rules = "Positive()/Default(1)"];
-  string username = 3 [(ent.field).rules = "Unique()"];
+  int32 age = 2 [(gent.field).rules = "Positive()/Default(1)"];
+  string username = 3 [(gent.field).rules = "Unique()"];
   string nickname = 4;
 }
 
@@ -104,8 +104,8 @@ message TimeMixin {
     type: "/mixin"
   };
   int64 id = 1;
-  google.protobuf.Timestamp created_at = 2 [(ent.field).rules = "Immutable().Default(time.Now)"];
-  google.protobuf.Timestamp updated_at = 3 [(ent.field).rules = "Default(time.Now).UpdateDefault(time.Now)"];
+  google.protobuf.Timestamp created_at = 2 [(gent.field).rules = "Immutable().Default(time.Now)"];
+  google.protobuf.Timestamp updated_at = 3 [(gent.field).rules = "Default(time.Now).UpdateDefault(time.Now)"];
 }
 
 message DetailsMixin {
@@ -113,8 +113,8 @@ message DetailsMixin {
     type: "/mixin"
   };
   int64 id = 1;
-  int64 age = 2 [(ent.field).rules = "Positive()"];
-  string name = 3 [(ent.field).rules = "NotEmpty()"];
+  int64 age = 2 [(gent.field).rules = "Positive()"];
+  string name = 3 [(gent.field).rules = "NotEmpty()"];
 }
 
 
