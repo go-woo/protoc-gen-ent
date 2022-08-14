@@ -12,7 +12,7 @@ import "google/protobuf/timestamp.proto";
 
 import "gent/gent.proto";
 
-option go_package = "protoc-gen-ent/example/v1;v1";
+option go_package = "protoc-gen-ent/example/ent/schema;schema";
 
 // The greeting service definition.
 service Greeter {
@@ -73,12 +73,12 @@ message User {
     pattern:
         "Indexes/index.Fields('username')/index.Fields('age', 'nickname').Unique()"
     pattern:
-        "Annotations/Table: 'example_users'"
+        "Annotations/entsql.Annotation{Table: 'example_user'}"
     pattern:
         "Mixin/TimeMixin{}/DetailsMixin{}"
   };
   int64 id = 1;
-  int32 age = 2 [(gent.field).rules = "Positive()/Default(1)"];
+  int32 age = 2 [(gent.field).rules = "Positive().Default(1)"];
   string username = 3 [(gent.field).rules = "Unique()"];
   string nickname = 4;
 }
@@ -90,8 +90,8 @@ message Pet {
         "Edges/edge.From('owner', User.Type).Ref('pets').Unique()"
   };
   int64 id = 1;
-  PetType ptype = 2;
-  string name = 3;
+  string name = 2;
+//  PetType ptype = 3;
 }
 
 enum PetType {

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/types/pluginpb"
+	"os"
 )
 
 var (
@@ -28,6 +29,7 @@ func main() {
 				continue
 			}
 			for _, sf := range generateSchemaFiles(gen, f, *omitempty) {
+				fmt.Fprintf(os.Stderr, "---\n")
 				generateSchemaFile(sf)
 			}
 		}

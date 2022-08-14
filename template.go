@@ -7,61 +7,116 @@ import (
 )
 
 var entTemplate = `
-package schema
-
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
+	"time"
 )
+var _ time.Month
+var _ entsql.Annotation
+var _ index.Descriptor
 
-// {{.MessageName}} holds the schema definition for the {{.MessageName}} entity.
 type {{.MessageName}} struct {
 	ent.Schema
 }
 
-// Fields of the {{.MessageName}}.
-func (Todo) Fields() []ent.Field {
+func ({{.MessageName}}) Fields() []ent.Field {
+	{{- if .HasFields}}
 	return []ent.Field{
-		field.Bytes("asd"),
+		{{- range .Fields}}
+		{{.FieldLine}},{{end}}
 	}
+	{{- else}}
+	return nil{{end}}
 }
 
-// Edges of the {{.MessageName}}.
 func ({{.MessageName}}) Edges() []ent.Edge {
-	return nil
+	{{- if .HasEdges}}
+	return []ent.Edge{
+		{{- range .Edges}}
+		{{.Relation}},{{end}}
+	}
+	{{- else}}
+	return nil{{end}}
+}
+
+func ({{.MessageName}}) Indexes() []ent.Index {
+	{{- if .HasIndexes}}
+	return []ent.Index{
+		{{- range .Indexes}}
+		{{.Relation}},{{end}}
+	}
+	{{- else}}
+	return nil{{end}}
+}
+
+func ({{.MessageName}}) Mixin() []ent.Mixin {
+	{{- if .HasMixin}}
+	return []ent.Mixin{
+		{{- range .Mixin}}
+		{{.Relation}},{{end}}
+	}
+	{{- else}}
+	return nil{{end}}
+}
+
+func ({{.MessageName}}) Annotations() []schema.Annotation {
+	{{- if .HasAnnotations}}
+	return []schema.Annotation{
+		{{- range .Annotations}}
+		{{.Relation}},{{end}}
+		
+	}
+	{{- else}}
+	return nil{{end}}
 }`
+
 var mixinTemplate = `
 import (
-	"encoding/base64"
-	"net/http"
-	"os"
-	"strconv"
 	"time"
-	
 
+	"entgo.io/ent"
+	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/mixin"
 )
-var _ strconv.NumError
-var _ time.Time
-var _ base64.CorruptInputError
-`
+
+var _ time.Month
+
+type {{.MessageName}} struct {
+	mixin.Schema
+}
+
+func ({{.MessageName}}) Fields() []ent.Field {
+	return []ent.Field{
+		{{- range .Fields}}
+		{{.FieldLine}},{{end}}
+	}
+}`
 
 type messageDesc struct {
-	MessageType string // User
-	MessageName string // User
-	SchemaType  string // "Ent"/"Mixin"
-	Metadata    string // example/v1/greeter.proto
-	HasField    bool
-	Fields      []*fieldDesc
+	MessageType    string // User
+	MessageName    string // User
+	HasFields      bool
+	Fields         []*fieldDesc
+	HasEdges       bool
+	Edges          []*relation
+	HasIndexes     bool
+	Indexes        []*relation
+	HasAnnotations bool
+	Annotations    []*relation
+	HasMixin       bool
+	Mixin          []*relation
 }
 
 type fieldDesc struct {
-	FieldName  string
-	FieldType  string
-	FieldRules string
+	FieldLine string
 }
 
-type fieldRule struct {
-	Rule string
+type relation struct {
+	Relation string
 }
 
 func (s *messageDesc) execute(tpl string) string {
