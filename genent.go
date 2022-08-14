@@ -39,8 +39,6 @@ import (
 //	endTypes
 //)
 
-//var methodSets = make(map[string]int)
-
 // generateSchemaFiles generates ent/scheme/files.
 func generateSchemaFiles(gen *protogen.Plugin, file *protogen.File, omitempty bool) []*protogen.GeneratedFile {
 	var pgs []*protogen.GeneratedFile
@@ -55,21 +53,9 @@ func generateSchemaFiles(gen *protogen.Plugin, file *protogen.File, omitempty bo
 		var pg *protogen.GeneratedFile
 		if resource.Type == "/ent" {
 			pg = generateEntFile(gen, file, message, omitempty, entTemplate)
-			//rj, _ := json.Marshal(resource)
-			//fmt.Fprintf(os.Stderr, "ent=====%v\n", string(rj))
-			//for _, field := range message.Fields {
-			//	fmt.Fprintf(os.Stderr, "\tent message:field-name-type=====%v:%v-%v\n",
-			//		message.Desc.Name(), field.GoName, field.Desc.Kind().String())
-			//}
 		}
 		if resource.Type == "/mixin" {
 			generateMixinFile(gen, file, message, omitempty, mixinTemplate)
-			//rj, _ := json.Marshal(resource)
-			//fmt.Fprintf(os.Stderr, "mixin=====%v\n", string(rj))
-			//for _, field := range message.Fields {
-			//	fmt.Fprintf(os.Stderr, "\tmixin message:field-name-type=====%v:%v-%v\n",
-			//		message.Desc.Name(), field.GoName, field.Desc.Kind().String())
-			//}
 		}
 		pgs = append(pgs, pg)
 	}
