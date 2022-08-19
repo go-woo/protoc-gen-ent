@@ -5,7 +5,7 @@ package gent;
 
 import "google/protobuf/descriptor.proto";
 
-option go_package = "github/go-woo/protoc-gen-ent/gent;gent";
+option go_package = "github.com/go-woo/protoc-gen-ent/gent;gent";
 
 extend google.protobuf.FieldOptions {
   // Rules specify the validations to be performed on this field. By default,
